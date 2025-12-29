@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>Teacher</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="p-10">
+    <h1 class="text-xl font-bold mb-5">Add Question</h1>
+    <input type="date" id="date" class="border p-2 mb-2 w-full">
+    <textarea id="q" placeholder="ප්‍රශ්නය" class="border p-2 mb-2 w-full"></textarea>
+    <input type="text" id="ans" placeholder="පිළිතුර (1 හෝ 2)" class="border p-2 mb-2 w-full">
+    <button onclick="save()" class="bg-black text-white p-3 w-full">Publish</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
+            authDomain: "morning-boster.firebaseapp.com",
+            databaseURL: "https://morning-boster-default-rtdb.firebaseio.com",
+            projectId: "morning-boster",
+            storageBucket: "morning-boster.firebasestorage.app",
+            messagingSenderId: "465023464210",
+            appId: "1:465023464210:web:1d53b1bd6185f2603fb9cb"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.save = function() {
+            const d = document.getElementById('date').value;
+            set(ref(db, 'booster/' + d), {
+                q: document.getElementById('q').value,
+                a: document.getElementById('ans').value
+            }).then(() => alert("Saved!"));
+        }
+    </script>
+</body>
+</html>
