@@ -3,108 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booster | Teacher Master Console</title>
+    <title>Booster Master | Teacher Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #08090d; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
-        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; width: 100%; color: white; outline: none; }
-        .input-box:focus { border-color: #8b5cf6; }
-        .tab-btn { padding: 10px 20px; border-radius: 12px; transition: 0.3s; cursor: pointer; }
-        .active-tab { background: #8b5cf6; color: white; }
+        body { font-family: 'Outfit', sans-serif; background: #08090d; color: white; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; }
+        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: #8b5cf6; background: rgba(255,255,255,0.08); }
+        .tab-btn { padding: 12px 24px; border-radius: 16px; transition: 0.4s; cursor: pointer; font-weight: 700; font-size: 14px; }
+        .active-tab { background: #8b5cf6; color: white; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3); }
         .hidden { display: none; }
+        .save-btn { background: linear-gradient(135deg, #7000ff, #ff007a); box-shadow: 0 15px 30px rgba(112, 0, 255, 0.3); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-10 pb-24">
 
-    <div class="max-w-5xl mx-auto space-y-6">
+    <div class="max-w-6xl mx-auto space-y-8">
         
-        <div class="glass p-2 flex gap-2 overflow-x-auto no-scrollbar">
-            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab flex items-center gap-2"><i data-lucide="home"></i> Home</div>
+        <div class="glass p-3 flex gap-4 overflow-x-auto no-scrollbar">
+            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab flex items-center gap-2"><i data-lucide="layout-grid"></i> Dashboard</div>
             <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn flex items-center gap-2"><i data-lucide="calendar"></i> Schedule Questions</div>
         </div>
 
-        <div id="tab-home" class="space-y-6 animate-fade-in">
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass p-6">
-                    <h3 class="text-pink-500 font-bold mb-4 flex items-center gap-2 uppercase text-xs tracking-widest"><i data-lucide="alert-circle"></i> Question that very difficult (Top 10)</h3>
-                    <div id="difficult-list" class="space-y-3">
-                        <p class="text-gray-500 text-sm italic">දත්ත විශ්ලේෂණය වෙමින් පවතී...</p>
+        <div id="tab-home" class="space-y-8 animate-in fade-in duration-500">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass p-8">
+                    <h3 class="text-pink-500 font-bold mb-6 flex items-center gap-3 uppercase text-xs tracking-[0.2em]"><i data-lucide="flame"></i> Top 10 Difficult Questions</h3>
+                    <div id="difficult-list" class="space-y-4">
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <span class="text-sm opacity-80">ලාභ හා අලාභ - Q1</span>
+                            <span class="text-xs font-bold text-pink-400">82% Fail Rate</span>
+                        </div>
                     </div>
                 </div>
-                <div class="glass p-6">
-                    <h3 class="text-blue-400 font-bold mb-4 uppercase text-xs tracking-widest"><i data-lucide="trending-up"></i> Overall Student Progress</h3>
-                    <div class="h-48 bg-white/5 rounded-xl flex items-end justify-around p-4 gap-2">
-                        <div class="bg-blue-500 w-full rounded-t-lg" style="height: 60%"></div>
-                        <div class="bg-purple-500 w-full rounded-t-lg" style="height: 85%"></div>
-                        <div class="bg-pink-500 w-full rounded-t-lg" style="height: 40%"></div>
-                    </div>
+
+                <div class="glass p-8 space-y-4">
+                    <h3 class="text-purple-400 font-bold mb-2 uppercase text-xs tracking-widest"><i data-lucide="book-open"></i> Daily Theory Booster</h3>
+                    <input type="text" id="theoryTitle" class="input-box" placeholder="Theory Title (Ex: UNIT 04)">
+                    <textarea id="theoryText" class="input-box h-40" placeholder="අද දවසේ සිද්ධාන්තය මෙතන ලියන්න..."></textarea>
                 </div>
-            </div>
-            
-            <div class="glass p-6">
-                <h3 class="text-purple-400 font-bold mb-4 uppercase text-xs">Daily Theory Update</h3>
-                <textarea id="theory-text" class="input-box h-32" placeholder="අද දවසේ විශේෂ සිද්ධාන්තය (Theory) ඇතුළත් කරන්න..."></textarea>
-                <button onclick="saveTheory()" class="mt-4 bg-purple-600 px-6 py-2 rounded-xl font-bold">Update Theory</button>
             </div>
         </div>
 
-        <div id="tab-schedule" class="hidden space-y-6">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass p-6">
-                    <h3 class="text-xs font-bold text-gray-400 uppercase mb-4">Select Date</h3>
-                    <input type="date" id="selected-date" class="input-box text-lg" onchange="loadDateContent()">
-                    <div id="edit-warning" class="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-[10px] text-yellow-500 hidden">
-                        ⚠️ පරණ දත්ත සංස්කරණය කළ නොහැක. අද දින දත්ත පමණක් Reset කළ හැක.
+        <div id="tab-schedule" class="hidden space-y-8 animate-in slide-in-from-bottom-5 duration-500">
+            <div class="grid lg:grid-cols-12 gap-8">
+                
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="glass p-8">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Select Date</h3>
+                        <input type="date" id="selected-date" class="input-box text-xl font-bold mb-4" onchange="checkDate()">
+                        <div id="edit-warning" class="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl text-[11px] text-yellow-500 hidden leading-relaxed">
+                             පරණ දත්ත සංස්කරණය කළ නොහැක. අද දින දත්ත පමණක් Reset කළ හැක.
+                        </div>
+                        <button id="reset-btn" onclick="resetToday()" class="w-full mt-4 border border-red-500/30 text-red-500 py-3 rounded-2xl text-xs font-bold hover:bg-red-500/10 transition hidden">RESET TODAY'S CONTENT</button>
                     </div>
-                    <button id="reset-btn" onclick="resetToday()" class="mt-4 w-full border border-red-500/30 text-red-500 py-2 rounded-xl text-xs font-bold hidden">RESET TODAY'S DATA</button>
+
+                    <div class="glass p-8 space-y-4">
+                        <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest">Analysis Patterns (URLs)</h3>
+                        <div id="url-inputs" class="space-y-2">
+                            </div>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2 glass p-6 space-y-6">
-                    <div id="q-container">
-                        <div class="space-y-6">
-                            <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                                <span class="text-[10px] font-bold text-indigo-400">QUESTION 01</span>
-                                <textarea id="q1-text" class="input-box mt-2" placeholder="ප්‍රශ්නය ලියන්න..."></textarea>
-                                <input type="text" id="q1-img" class="input-box mt-2 text-xs" placeholder="Image URL (පින්තූරයක් ඇත්නම්)">
-                                <div class="flex items-center gap-4 mt-2">
-                                    <label class="text-xs">හරි පිළිතුර:</label>
-                                    <input type="checkbox" id="q1-check" class="w-5 h-5 accent-green-500">
-                                </div>
-                            </div>
-                            <div id="more-questions" class="space-y-6"></div> 
-                        </div>
-                    </div>
-
-                    <div class="pt-6 border-t border-white/10 space-y-3">
-                        <h3 class="text-xs font-bold text-purple-400 uppercase">Analysis Video Links (Patterns)</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <input type="text" id="url1" class="input-box text-xs" placeholder="(1) හරි, (2) වැරදි, (3) වැරදි - URL">
-                            <input type="text" id="url2" class="input-box text-xs" placeholder="(1) වැරදි, (2) හරි, (3) වැරදි - URL">
-                            <input type="text" id="url3" class="input-box text-xs" placeholder="(1) වැරදි, (2) වැරදි, (3) හරි - URL">
-                            <input type="text" id="url4" class="input-box text-xs" placeholder="(1) හරි, (2) හරි, (3) වැරදි - URL">
-                            </div>
-                    </div>
-
-                    <div class="pt-6 border-t border-white/10 space-y-4">
+                <div class="lg:col-span-8 space-y-8">
+                    
+                    <div class="glass p-8 border-l-8 border-l-purple-600 space-y-6">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-xs font-bold text-yellow-500 uppercase">Flash Cards Builder</h3>
-                            <div class="flex gap-2 text-xs">
-                                <button class="px-2 bg-white/5 rounded"><-</button>
-                                <span>Card 1/3</span>
-                                <button class="px-2 bg-white/5 rounded">-></button>
-                            </div>
+                            <h4 class="font-black text-purple-500 uppercase tracking-tighter text-xl italic">Question 01</h4>
+                            <input type="text" id="q1-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL (Optional)">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <textarea id="flash-front" class="input-box h-24" placeholder="Front (ප්‍රශ්නය/පින්තූරය)"></textarea>
-                            <textarea id="flash-back" class="input-box h-24" placeholder="Back (පිළිතුර/විස්තරය)"></textarea>
+                        <textarea id="q1-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
+                        
+                        <div class="space-y-3">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Mark the Correct Answer</p>
+                            <div id="q1-options" class="space-y-2">
+                                </div>
                         </div>
                     </div>
 
-                    <button onclick="publishAll()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-4 rounded-2xl font-black tracking-widest uppercase mt-6 shadow-xl shadow-purple-900/20">
-                        Publish To Students
+                    <div class="glass p-8 border-l-8 border-l-pink-600 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-black text-pink-500 uppercase tracking-tighter text-xl italic">Question 02</h4>
+                            <input type="text" id="q2-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
+                        </div>
+                        <textarea id="q2-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
+                        <div id="q2-options" class="space-y-2"></div>
+                    </div>
+
+                    <div class="glass p-8 border-l-8 border-l-blue-600 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-black text-blue-500 uppercase tracking-tighter text-xl italic">Question 03</h4>
+                            <input type="text" id="q3-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
+                        </div>
+                        <textarea id="q3-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
+                        <div id="q3-options" class="space-y-2"></div>
+                    </div>
+
+                    <div class="glass p-8 border-t-4 border-t-yellow-500 space-y-4">
+                        <h3 class="text-xs font-bold text-yellow-500 uppercase tracking-widest">Flash Card Builder</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <p class="text-[10px] text-gray-500 uppercase font-bold">Front Side</p>
+                                <textarea id="flashFront" class="input-box h-28" placeholder="මාතෘකාව හෝ පින්තූරය..."></textarea>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-[10px] text-gray-500 uppercase font-bold">Back Side</p>
+                                <textarea id="flashBack" class="input-box h-28" placeholder="කෙටි පිළිතුර හෝ විස්තරය..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="publishData()" class="save-btn w-full py-6 rounded-[2rem] font-black text-sm tracking-[0.4em] uppercase flex items-center justify-center gap-4 transition-all">
+                        Publish Content <i data-lucide="send" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
@@ -114,8 +126,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
             authDomain: "morning-boster.firebaseapp.com",
@@ -130,60 +143,107 @@
         const db = getDatabase(app);
         const today = new Date().toISOString().split('T')[0];
 
-        // Icons
+        // UI Setup
+        document.getElementById('selected-date').value = today;
         lucide.createIcons();
 
-        // Tab Switching
+        // Dynamic Elements Generator
+        const generateOptions = (qID) => {
+            let html = '';
+            for(let i=1; i<=5; i++) {
+                html += `
+                <div class="flex items-center gap-4 bg-white/5 p-2 rounded-xl border border-white/5">
+                    <input type="radio" name="${qID}-correct" value="${i}" class="w-5 h-5 accent-purple-500">
+                    <input type="text" id="${qID}-ans-${i}" class="bg-transparent border-none outline-none text-sm w-full" placeholder="Answer ${i}">
+                </div>`;
+            }
+            document.getElementById(`${qID}-options`).innerHTML = html;
+        };
+
+        const generatePatternInputs = () => {
+            const patterns = [
+                "(1) හරි, (2) වැරදි, (3) වැරදි",
+                "(1) වැරදි, (2) හරි, (3) වැරදි",
+                "(1) වැරදි, (2) වැරදි, (3) හරි",
+                "(1) හරි, (2) හරි, (3) වැරදි",
+                "(1) හරි, (2) වැරදි, (3) හරි",
+                "(1) වැරදි, (2) හරි, (3) හරි",
+                "(1) හරි, (2) හරි, (3) හරි",
+                "(1) වැරදි, (2) වැරදි, (3) වැරදි"
+            ];
+            let html = '';
+            patterns.forEach((p, index) => {
+                html += `<input type="url" id="pattern-${index}" class="input-box text-[10px]" placeholder="${p} Video URL">`;
+            });
+            document.getElementById('url-inputs').innerHTML = html;
+        };
+
+        generateOptions('q1');
+        generateOptions('q2');
+        generateOptions('q3');
+        generatePatternInputs();
+
+        // Tab Logic
         window.showTab = (tab) => {
             document.getElementById('tab-home').classList.add('hidden');
             document.getElementById('tab-schedule').classList.add('hidden');
             document.getElementById('btn-home').classList.remove('active-tab');
             document.getElementById('btn-schedule').classList.remove('active-tab');
-            
             document.getElementById('tab-' + tab).classList.remove('hidden');
             document.getElementById('btn-' + tab).classList.add('active-tab');
         };
 
-        // Load Default Date
-        document.getElementById('selected-date').value = today;
-
-        window.loadDateContent = () => {
+        window.checkDate = () => {
             const date = document.getElementById('selected-date').value;
-            const resetBtn = document.getElementById('reset-btn');
-            const warning = document.getElementById('edit-warning');
+            const isToday = date === today;
+            document.getElementById('reset-btn').classList.toggle('hidden', !isToday);
+            document.getElementById('edit-warning').classList.toggle('hidden', isToday);
+        };
 
-            if(date === today) {
-                resetBtn.classList.remove('hidden');
-                warning.classList.add('hidden');
-            } else {
-                resetBtn.classList.add('hidden');
-                warning.classList.remove('hidden');
-            }
-            
-            // Firebase එකෙන් දත්ත කියවීම මෙතනට එක් කරන්න
+        // Publish Data
+        window.publishData = function() {
+            const date = document.getElementById('selected-date').value;
+            if(!date) return alert("Select Date!");
+
+            const getQData = (id) => {
+                const correct = document.querySelector(`input[name="${id}-correct"]:checked`);
+                return {
+                    text: document.getElementById(`${id}-text`).value,
+                    img: document.getElementById(`${id}-img`).value,
+                    ans: [
+                        document.getElementById(`${id}-ans-1`).value,
+                        document.getElementById(`${id}-ans-2`).value,
+                        document.getElementById(`${id}-ans-3`).value,
+                        document.getElementById(`${id}-ans-4`).value,
+                        document.getElementById(`${id}-ans-5`).value
+                    ],
+                    correct: correct ? correct.value : null
+                };
+            };
+
+            const patternUrls = [];
+            for(let i=0; i<8; i++) patternUrls.push(document.getElementById(`pattern-${i}`).value);
+
+            const payload = {
+                theory: { title: document.getElementById('theoryTitle').value, text: document.getElementById('theoryText').value },
+                questions: { q1: getQData('q1'), q2: getQData('q2'), q3: getQData('q3') },
+                patterns: patternUrls,
+                flash: { front: document.getElementById('flashFront').value, back: document.getElementById('flashBack').value }
+            };
+
+            set(ref(db, 'booster/' + date), payload).then(() => {
+                alert("Published Successfully! ✅");
+                location.reload();
+            });
         };
 
         window.resetToday = () => {
-            if(confirm("අද දවසේ සියලු දත්ත මකා දමා නැවත ලිවීමට අවශ්‍යද? (සිසුන්ගේ ප්‍රතිපලද මකා දැමෙනු ඇත)")) {
-                set(ref(db, 'booster/' + today), null);
-                alert("Reset කරන ලදී!");
-                location.reload();
+            if(confirm("අද දවසේ සියලු දත්ත මකා දමන්නද?")) {
+                set(ref(db, 'booster/' + today), null).then(() => location.reload());
             }
         };
 
-        window.publishAll = () => {
-            const date = document.getElementById('selected-date').value;
-            const data = {
-                q1: { text: document.getElementById('q1-text').value, img: document.getElementById('q1-img').value, correct: document.getElementById('q1-check').checked },
-                // Q2, Q3...
-                urls: [document.getElementById('url1').value, document.getElementById('url2').value],
-                flash: { front: document.getElementById('flash-front').value, back: document.getElementById('flash-back').value }
-            };
-            
-            set(ref(db, 'booster/' + date), data).then(() => alert("සාර්ථකව Publish කරන ලදී!"));
-        };
-
-        loadDateContent();
+        checkDate();
     </script>
 </body>
 </html>
