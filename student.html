@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head><title>Student</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-black text-white p-10">
+    <div id="box" class="bg-gray-900 p-5 rounded-xl border border-gray-700">
+        <h2 id="qText">ප්‍රශ්නය පූරණය වේ...</h2>
+        <button onclick="check()" class="bg-blue-600 p-3 mt-5 w-full rounded">පිළිතුර ලබා දෙන්න</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
+            authDomain: "morning-boster.firebaseapp.com",
+            databaseURL: "https://morning-boster-default-rtdb.firebaseio.com",
+            projectId: "morning-boster",
+            storageBucket: "morning-boster.firebasestorage.app",
+            messagingSenderId: "465023464210",
+            appId: "1:465023464210:web:1d53b1bd6185f2603fb9cb"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const today = new Date().toISOString().split('T')[0];
+        let correctAns = "";
+
+        onValue(ref(db, 'booster/' + today), (s) => {
+            if(s.exists()){
+                document.getElementById('qText').innerText = s.val().q;
+                correctAns = s.val().a;
+            } else {
+                document.getElementById('qText').innerText = "අදට ප්‍රශ්න නැත.";
+            }
+        });
+
+        window.check = function() {
+            const u = prompt("පිළිතුර ඇතුල් කරන්න:");
+            if(u == correctAns) alert("නිවැරදියි! 🎉");
+            else alert("වැරදියි! ❌");
+        }
+    </script>
+</body>
+</html>
