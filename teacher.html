@@ -3,70 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Booster | Teacher Panel</title>
+    <title>Booster | Teacher Master Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #050508; color: white; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; }
-        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 12px; width: 100%; color: white; outline: none; }
-        .input-field:focus { border-color: #7000ff; }
-        .save-btn { background: linear-gradient(135deg, #7000ff, #ff007a); transition: all 0.3s; }
-        .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(112, 0, 255, 0.4); }
+        body { font-family: 'Outfit', sans-serif; background: #08090d; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
+        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; width: 100%; color: white; outline: none; }
+        .input-box:focus { border-color: #8b5cf6; }
+        .tab-btn { padding: 10px 20px; border-radius: 12px; transition: 0.3s; cursor: pointer; }
+        .active-tab { background: #8b5cf6; color: white; }
+        .hidden { display: none; }
     </style>
 </head>
-<body class="p-6 pb-20">
+<body class="p-4 md:p-8">
 
-    <div class="max-w-xl mx-auto space-y-8">
-        <header class="flex justify-between items-center bg-white/5 p-6 rounded-[2rem] border border-white/10">
-            <div>
-                <h1 class="text-xl font-black italic tracking-tighter uppercase">Teacher <span class="text-purple-500">Console</span></h1>
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Update Today's Content</p>
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <div class="glass p-2 flex gap-2 overflow-x-auto no-scrollbar">
+            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab flex items-center gap-2"><i data-lucide="home"></i> Home</div>
+            <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn flex items-center gap-2"><i data-lucide="calendar"></i> Schedule Questions</div>
+        </div>
+
+        <div id="tab-home" class="space-y-6 animate-fade-in">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass p-6">
+                    <h3 class="text-pink-500 font-bold mb-4 flex items-center gap-2 uppercase text-xs tracking-widest"><i data-lucide="alert-circle"></i> Question that very difficult (Top 10)</h3>
+                    <div id="difficult-list" class="space-y-3">
+                        <p class="text-gray-500 text-sm italic">දත්ත විශ්ලේෂණය වෙමින් පවතී...</p>
+                    </div>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="text-blue-400 font-bold mb-4 uppercase text-xs tracking-widest"><i data-lucide="trending-up"></i> Overall Student Progress</h3>
+                    <div class="h-48 bg-white/5 rounded-xl flex items-end justify-around p-4 gap-2">
+                        <div class="bg-blue-500 w-full rounded-t-lg" style="height: 60%"></div>
+                        <div class="bg-purple-500 w-full rounded-t-lg" style="height: 85%"></div>
+                        <div class="bg-pink-500 w-full rounded-t-lg" style="height: 40%"></div>
+                    </div>
+                </div>
             </div>
-            <i data-lucide="layout-dashboard" class="text-purple-500"></i>
-        </header>
-
-        <section class="glass-card p-6">
-            <label class="text-[10px] font-bold text-purple-400 uppercase tracking-widest block mb-2">Publish Date</label>
-            <input type="date" id="targetDate" class="input-field">
-        </section>
-
-        <section class="glass-card p-6 space-y-4">
-            <div class="flex items-center gap-2 mb-2">
-                <i data-lucide="book-open" class="w-4 h-4 text-purple-400"></i>
-                <h3 class="font-bold text-sm">Booster Question</h3>
+            
+            <div class="glass p-6">
+                <h3 class="text-purple-400 font-bold mb-4 uppercase text-xs">Daily Theory Update</h3>
+                <textarea id="theory-text" class="input-box h-32" placeholder="අද දවසේ විශේෂ සිද්ධාන්තය (Theory) ඇතුළත් කරන්න..."></textarea>
+                <button onclick="saveTheory()" class="mt-4 bg-purple-600 px-6 py-2 rounded-xl font-bold">Update Theory</button>
             </div>
-            <textarea id="mainQ" placeholder="ප්‍රශ්නය මෙතන ලියන්න..." class="input-field h-24"></textarea>
-            <input type="text" id="mainA" placeholder="නිවැරදි පිළිතුර" class="input-field">
-        </section>
+        </div>
 
-        <section class="glass-card p-6 space-y-4">
-            <div class="flex items-center gap-2 mb-2">
-                <i data-lucide="youtube" class="w-4 h-4 text-pink-500"></i>
-                <h3 class="font-bold text-sm">Video Lesson (Optional)</h3>
+        <div id="tab-schedule" class="hidden space-y-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass p-6">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase mb-4">Select Date</h3>
+                    <input type="date" id="selected-date" class="input-box text-lg" onchange="loadDateContent()">
+                    <div id="edit-warning" class="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-[10px] text-yellow-500 hidden">
+                        ⚠️ පරණ දත්ත සංස්කරණය කළ නොහැක. අද දින දත්ත පමණක් Reset කළ හැක.
+                    </div>
+                    <button id="reset-btn" onclick="resetToday()" class="mt-4 w-full border border-red-500/30 text-red-500 py-2 rounded-xl text-xs font-bold hidden">RESET TODAY'S DATA</button>
+                </div>
+
+                <div class="md:col-span-2 glass p-6 space-y-6">
+                    <div id="q-container">
+                        <div class="space-y-6">
+                            <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                <span class="text-[10px] font-bold text-indigo-400">QUESTION 01</span>
+                                <textarea id="q1-text" class="input-box mt-2" placeholder="ප්‍රශ්නය ලියන්න..."></textarea>
+                                <input type="text" id="q1-img" class="input-box mt-2 text-xs" placeholder="Image URL (පින්තූරයක් ඇත්නම්)">
+                                <div class="flex items-center gap-4 mt-2">
+                                    <label class="text-xs">හරි පිළිතුර:</label>
+                                    <input type="checkbox" id="q1-check" class="w-5 h-5 accent-green-500">
+                                </div>
+                            </div>
+                            <div id="more-questions" class="space-y-6"></div> 
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 space-y-3">
+                        <h3 class="text-xs font-bold text-purple-400 uppercase">Analysis Video Links (Patterns)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <input type="text" id="url1" class="input-box text-xs" placeholder="(1) හරි, (2) වැරදි, (3) වැරදි - URL">
+                            <input type="text" id="url2" class="input-box text-xs" placeholder="(1) වැරදි, (2) හරි, (3) වැරදි - URL">
+                            <input type="text" id="url3" class="input-box text-xs" placeholder="(1) වැරදි, (2) වැරදි, (3) හරි - URL">
+                            <input type="text" id="url4" class="input-box text-xs" placeholder="(1) හරි, (2) හරි, (3) වැරදි - URL">
+                            </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xs font-bold text-yellow-500 uppercase">Flash Cards Builder</h3>
+                            <div class="flex gap-2 text-xs">
+                                <button class="px-2 bg-white/5 rounded"><-</button>
+                                <span>Card 1/3</span>
+                                <button class="px-2 bg-white/5 rounded">-></button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <textarea id="flash-front" class="input-box h-24" placeholder="Front (ප්‍රශ්නය/පින්තූරය)"></textarea>
+                            <textarea id="flash-back" class="input-box h-24" placeholder="Back (පිළිතුර/විස්තරය)"></textarea>
+                        </div>
+                    </div>
+
+                    <button onclick="publishAll()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-4 rounded-2xl font-black tracking-widest uppercase mt-6 shadow-xl shadow-purple-900/20">
+                        Publish To Students
+                    </button>
+                </div>
             </div>
-            <input type="url" id="videoUrl" placeholder="YouTube Video URL එක මෙතන දාන්න" class="input-field">
-        </section>
-
-        <section class="glass-card p-6 space-y-4 border-l-4 border-l-yellow-500">
-            <div class="flex items-center gap-2 mb-2">
-                <i data-lucide="zap" class="w-4 h-4 text-yellow-500"></i>
-                <h3 class="font-bold text-sm">Flash Card (Quick Theory)</h3>
-            </div>
-            <input type="text" id="flashFront" placeholder="Front: ප්‍රශ්නය හෝ මාතෘකාව" class="input-field">
-            <textarea id="flashBack" placeholder="Back: කෙටි විස්තරය හෝ පිළිතුර" class="input-field h-20"></textarea>
-        </section>
-
-        <button onclick="publishData()" class="save-btn w-full py-5 rounded-[2rem] font-black text-sm tracking-[0.2em] uppercase flex items-center justify-center gap-3">
-            PUBLISH CONTENT <i data-lucide="send" class="w-4 h-4"></i>
-        </button>
+        </div>
 
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
@@ -80,32 +128,62 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const today = new Date().toISOString().split('T')[0];
 
-        // අද දිනය default එක ලෙස දැමීම
-        document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
+        // Icons
         lucide.createIcons();
 
-        window.publishData = function() {
-            const date = document.getElementById('targetDate').value;
-            if(!date) return alert("කරුණාකර දිනයක් තෝරන්න!");
+        // Tab Switching
+        window.showTab = (tab) => {
+            document.getElementById('tab-home').classList.add('hidden');
+            document.getElementById('tab-schedule').classList.add('hidden');
+            document.getElementById('btn-home').classList.remove('active-tab');
+            document.getElementById('btn-schedule').classList.remove('active-tab');
+            
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active-tab');
+        };
 
-            const data = {
-                q: document.getElementById('mainQ').value,
-                a: document.getElementById('mainA').value,
-                video: document.getElementById('videoUrl').value,
-                flash: {
-                    front: document.getElementById('flashFront').value,
-                    back: document.getElementById('flashBack').value
-                }
-            };
+        // Load Default Date
+        document.getElementById('selected-date').value = today;
 
-            set(ref(db, 'booster/' + date), data).then(() => {
-                alert("අන්තර්ගතය සාර්ථකව පල කරන ලදී! ✅");
+        window.loadDateContent = () => {
+            const date = document.getElementById('selected-date').value;
+            const resetBtn = document.getElementById('reset-btn');
+            const warning = document.getElementById('edit-warning');
+
+            if(date === today) {
+                resetBtn.classList.remove('hidden');
+                warning.classList.add('hidden');
+            } else {
+                resetBtn.classList.add('hidden');
+                warning.classList.remove('hidden');
+            }
+            
+            // Firebase එකෙන් දත්ත කියවීම මෙතනට එක් කරන්න
+        };
+
+        window.resetToday = () => {
+            if(confirm("අද දවසේ සියලු දත්ත මකා දමා නැවත ලිවීමට අවශ්‍යද? (සිසුන්ගේ ප්‍රතිපලද මකා දැමෙනු ඇත)")) {
+                set(ref(db, 'booster/' + today), null);
+                alert("Reset කරන ලදී!");
                 location.reload();
-            }).catch(err => {
-                alert("දෝෂයක් ඇතිවිය: " + err.message);
-            });
-        }
+            }
+        };
+
+        window.publishAll = () => {
+            const date = document.getElementById('selected-date').value;
+            const data = {
+                q1: { text: document.getElementById('q1-text').value, img: document.getElementById('q1-img').value, correct: document.getElementById('q1-check').checked },
+                // Q2, Q3...
+                urls: [document.getElementById('url1').value, document.getElementById('url2').value],
+                flash: { front: document.getElementById('flash-front').value, back: document.getElementById('flash-back').value }
+            };
+            
+            set(ref(db, 'booster/' + date), data).then(() => alert("සාර්ථකව Publish කරන ලදී!"));
+        };
+
+        loadDateContent();
     </script>
 </body>
 </html>
