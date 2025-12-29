@@ -13,7 +13,7 @@
         .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
         .input-box:focus { border-color: #8b5cf6; background: rgba(255,255,255,0.08); }
         .tab-btn { padding: 12px 24px; border-radius: 16px; transition: 0.4s; cursor: pointer; font-weight: 700; font-size: 14px; }
-        .active-tab { background: #8b5cf6; color: white; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3); }
+        .active-tab { background: #007bff; color: white; box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3); }
         .hidden { display: none; }
         .save-btn { background: linear-gradient(135deg, #7000ff, #ff007a); box-shadow: 0 15px 30px rgba(112, 0, 255, 0.3); }
     </style>
@@ -22,97 +22,59 @@
 
     <div class="max-w-6xl mx-auto space-y-8">
         
-        <div class="glass p-3 flex gap-4 overflow-x-auto no-scrollbar">
-            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab flex items-center gap-2"><i data-lucide="layout-grid"></i> Dashboard</div>
-            <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn flex items-center gap-2"><i data-lucide="calendar"></i> Schedule Questions</div>
+        <div class="flex gap-4 mb-8">
+            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab">Home</div>
+            <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn bg-gray-800">Schedule Questions</div>
         </div>
 
-        <div id="tab-home" class="space-y-8 animate-in fade-in duration-500">
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass p-8">
-                    <h3 class="text-pink-500 font-bold mb-6 flex items-center gap-3 uppercase text-xs tracking-[0.2em]"><i data-lucide="flame"></i> Top 10 Difficult Questions</h3>
-                    <div id="difficult-list" class="space-y-4">
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
-                            <span class="text-sm opacity-80">ලාභ හා අලාභ - Q1</span>
-                            <span class="text-xs font-bold text-pink-400">82% Fail Rate</span>
-                        </div>
-                    </div>
+        <div id="tab-home" class="space-y-8">
+            <h1 class="text-2xl font-bold">Hello sir, good morning!</h1>
+            
+            <div class="glass p-8 space-y-4 max-w-2xl">
+                <h3 class="text-lg font-bold">Questions that very difficult (Top 10)</h3>
+                <div class="glass bg-blue-500/20 p-10 rounded-2xl text-center">
+                    <p class="text-xl font-bold">Theory ()</p>
                 </div>
+            </div>
 
-                <div class="glass p-8 space-y-4">
-                    <h3 class="text-purple-400 font-bold mb-2 uppercase text-xs tracking-widest"><i data-lucide="book-open"></i> Daily Theory Booster</h3>
-                    <input type="text" id="theoryTitle" class="input-box" placeholder="Theory Title (Ex: UNIT 04)">
-                    <textarea id="theoryText" class="input-box h-40" placeholder="අද දවසේ සිද්ධාන්තය මෙතන ලියන්න..."></textarea>
+            <div class="glass p-8 max-w-md">
+                <div class="h-40 flex items-end justify-around gap-2 border-b border-gray-700">
+                    <div class="bg-orange-500 w-2 h-24"></div>
+                    <div class="bg-blue-400 w-2 h-16"></div>
+                    <div class="bg-orange-500 w-2 h-32"></div>
+                </div>
+                <div class="flex gap-4 mt-4 text-xs">
+                    <span class="flex items-center gap-1"><div class="w-3 h-1 bg-orange-500"></div> Column 1</span>
+                    <span class="flex items-center gap-1"><div class="w-3 h-1 bg-blue-400"></div> Column 2</span>
                 </div>
             </div>
         </div>
 
-        <div id="tab-schedule" class="hidden space-y-8 animate-in slide-in-from-bottom-5 duration-500">
+        <div id="tab-schedule" class="hidden space-y-8">
             <div class="grid lg:grid-cols-12 gap-8">
                 
                 <div class="lg:col-span-4 space-y-6">
                     <div class="glass p-8">
-                        <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Select Date</h3>
                         <input type="date" id="selected-date" class="input-box text-xl font-bold mb-4" onchange="checkDate()">
-                        <div id="edit-warning" class="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-2xl text-[11px] text-yellow-500 hidden leading-relaxed">
-                             පරණ දත්ත සංස්කරණය කළ නොහැක. අද දින දත්ත පමණක් Reset කළ හැක.
-                        </div>
-                        <button id="reset-btn" onclick="resetToday()" class="w-full mt-4 border border-red-500/30 text-red-500 py-3 rounded-2xl text-xs font-bold hover:bg-red-500/10 transition hidden">RESET TODAY'S CONTENT</button>
+                        <button id="reset-btn" onclick="resetToday()" class="w-full border border-red-500/30 text-red-500 py-3 rounded-2xl text-xs font-bold hidden">RESET TODAY</button>
                     </div>
 
                     <div class="glass p-8 space-y-4">
-                        <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest">Analysis Patterns (URLs)</h3>
-                        <div id="url-inputs" class="space-y-2">
-                            </div>
+                        <h3 class="text-xs font-bold text-blue-400 uppercase">Analysis URLs</h3>
+                        <div id="url-inputs" class="space-y-2"></div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-8 space-y-8">
                     
-                    <div class="glass p-8 border-l-8 border-l-purple-600 space-y-6">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-black text-purple-500 uppercase tracking-tighter text-xl italic">Question 01</h4>
-                            <input type="text" id="q1-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL (Optional)">
+                    <div id="questions-container" class="space-y-8">
                         </div>
-                        <textarea id="q1-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
+
+                    <div class="glass p-8 border-t-4 border-t-yellow-500 space-y-6">
+                        <h3 class="text-lg font-black text-yellow-500 uppercase italic">Flash Cards (3 Sets)</h3>
                         
-                        <div class="space-y-3">
-                            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Mark the Correct Answer</p>
-                            <div id="q1-options" class="space-y-2">
-                                </div>
-                        </div>
-                    </div>
-
-                    <div class="glass p-8 border-l-8 border-l-pink-600 space-y-6">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-black text-pink-500 uppercase tracking-tighter text-xl italic">Question 02</h4>
-                            <input type="text" id="q2-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
-                        </div>
-                        <textarea id="q2-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
-                        <div id="q2-options" class="space-y-2"></div>
-                    </div>
-
-                    <div class="glass p-8 border-l-8 border-l-blue-600 space-y-6">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-black text-blue-500 uppercase tracking-tighter text-xl italic">Question 03</h4>
-                            <input type="text" id="q3-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
-                        </div>
-                        <textarea id="q3-text" class="input-box h-24" placeholder="ප්‍රශ්නය මෙතන ලියන්න..."></textarea>
-                        <div id="q3-options" class="space-y-2"></div>
-                    </div>
-
-                    <div class="glass p-8 border-t-4 border-t-yellow-500 space-y-4">
-                        <h3 class="text-xs font-bold text-yellow-500 uppercase tracking-widest">Flash Card Builder</h3>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <p class="text-[10px] text-gray-500 uppercase font-bold">Front Side</p>
-                                <textarea id="flashFront" class="input-box h-28" placeholder="මාතෘකාව හෝ පින්තූරය..."></textarea>
+                        <div id="flash-cards-container" class="space-y-8">
                             </div>
-                            <div class="space-y-2">
-                                <p class="text-[10px] text-gray-500 uppercase font-bold">Back Side</p>
-                                <textarea id="flashBack" class="input-box h-28" placeholder="කෙටි පිළිතුර හෝ විස්තරය..."></textarea>
-                            </div>
-                        </div>
                     </div>
 
                     <button onclick="publishData()" class="save-btn w-full py-6 rounded-[2rem] font-black text-sm tracking-[0.4em] uppercase flex items-center justify-center gap-4 transition-all">
@@ -121,14 +83,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
             authDomain: "morning-boster.firebaseapp.com",
@@ -143,107 +103,82 @@
         const db = getDatabase(app);
         const today = new Date().toISOString().split('T')[0];
 
-        // UI Setup
-        document.getElementById('selected-date').value = today;
-        lucide.createIcons();
+        // UI Generation
+        const initUI = () => {
+            // Questions
+            let qHtml = '';
+            ['q1', 'q2', 'q3'].forEach((q, idx) => {
+                qHtml += `
+                <div class="glass p-8 border-l-8 border-l-purple-600 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-black text-purple-500 text-xl italic uppercase">Question 0${idx+1}</h4>
+                        <input type="text" id="${q}-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
+                    </div>
+                    <textarea id="${q}-text" class="input-box h-24" placeholder="ප්‍රශ්නය ලියන්න..."></textarea>
+                    <div class="space-y-2">
+                        ${[1,2,3,4,5].map(i => `
+                            <div class="flex items-center gap-3 bg-white/5 p-2 rounded-xl border border-white/5">
+                                <input type="radio" name="${q}-correct" value="${i}" class="w-5 h-5 accent-purple-500">
+                                <input type="text" id="${q}-ans-${i}" class="bg-transparent border-none outline-none text-sm w-full" placeholder="Answer ${i}">
+                            </div>`).join('')}
+                    </div>
+                </div>`;
+            });
+            document.getElementById('questions-container').innerHTML = qHtml;
 
-        // Dynamic Elements Generator
-        const generateOptions = (qID) => {
-            let html = '';
-            for(let i=1; i<=5; i++) {
-                html += `
-                <div class="flex items-center gap-4 bg-white/5 p-2 rounded-xl border border-white/5">
-                    <input type="radio" name="${qID}-correct" value="${i}" class="w-5 h-5 accent-purple-500">
-                    <input type="text" id="${qID}-ans-${i}" class="bg-transparent border-none outline-none text-sm w-full" placeholder="Answer ${i}">
+            // Flash Cards
+            let fHtml = '';
+            for(let i=1; i<=3; i++) {
+                fHtml += `
+                <div class="p-6 bg-white/5 rounded-2xl border border-yellow-500/20 space-y-4">
+                    <p class="text-[10px] font-bold text-yellow-500 uppercase">Flash Card 0${i} (Adala Question 0${i})</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <textarea id="flash-f-${i}" class="input-box h-20 text-xs" placeholder="Front Side Text"></textarea>
+                        <textarea id="flash-b-${i}" class="input-box h-20 text-xs" placeholder="Back Side Text"></textarea>
+                    </div>
+                    <input type="text" id="flash-img-${i}" class="input-box text-[10px]" placeholder="Flash Card Image URL (Optional)">
                 </div>`;
             }
-            document.getElementById(`${qID}-options`).innerHTML = html;
+            document.getElementById('flash-cards-container').innerHTML = fHtml;
+
+            // Pattern URLs
+            const patterns = ["(1) හරි, (2) වැරදි, (3) වැරදි", "(1) වැරදි, (2) හරි, (3) වැරදි", "(1) වැරදි, (2) වැරදි, (3) හරි", "(1) හරි, (2) හරි, (3) වැරදි", "(1) හරි, (2) වැරදි, (3) හරි", "(1) වැරදි, (2) හරි, (3) හරි", "(1) හරි, (2) හරි, (3) හරි", "(1) වැරදි, (2) වැරදි, (3) වැරදි"];
+            document.getElementById('url-inputs').innerHTML = patterns.map((p, i) => `<input type="url" id="pattern-${i}" class="input-box text-[10px]" placeholder="${p} URL">`).join('');
         };
 
-        const generatePatternInputs = () => {
-            const patterns = [
-                "(1) හරි, (2) වැරදි, (3) වැරදි",
-                "(1) වැරදි, (2) හරි, (3) වැරදි",
-                "(1) වැරදි, (2) වැරදි, (3) හරි",
-                "(1) හරි, (2) හරි, (3) වැරදි",
-                "(1) හරි, (2) වැරදි, (3) හරි",
-                "(1) වැරදි, (2) හරි, (3) හරි",
-                "(1) හරි, (2) හරි, (3) හරි",
-                "(1) වැරදි, (2) වැරදි, (3) වැරදි"
-            ];
-            let html = '';
-            patterns.forEach((p, index) => {
-                html += `<input type="url" id="pattern-${index}" class="input-box text-[10px]" placeholder="${p} Video URL">`;
-            });
-            document.getElementById('url-inputs').innerHTML = html;
-        };
-
-        generateOptions('q1');
-        generateOptions('q2');
-        generateOptions('q3');
-        generatePatternInputs();
-
-        // Tab Logic
         window.showTab = (tab) => {
-            document.getElementById('tab-home').classList.add('hidden');
-            document.getElementById('tab-schedule').classList.add('hidden');
-            document.getElementById('btn-home').classList.remove('active-tab');
-            document.getElementById('btn-schedule').classList.remove('active-tab');
-            document.getElementById('tab-' + tab).classList.remove('hidden');
-            document.getElementById('btn-' + tab).classList.add('active-tab');
+            document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
+            document.getElementById('tab-schedule').classList.toggle('hidden', tab !== 'schedule');
+            document.getElementById('btn-home').className = tab === 'home' ? 'tab-btn active-tab' : 'tab-btn bg-gray-800';
+            document.getElementById('btn-schedule').className = tab === 'schedule' ? 'tab-btn active-tab' : 'tab-btn bg-gray-800';
         };
 
-        window.checkDate = () => {
-            const date = document.getElementById('selected-date').value;
-            const isToday = date === today;
-            document.getElementById('reset-btn').classList.toggle('hidden', !isToday);
-            document.getElementById('edit-warning').classList.toggle('hidden', isToday);
-        };
-
-        // Publish Data
         window.publishData = function() {
             const date = document.getElementById('selected-date').value;
-            if(!date) return alert("Select Date!");
+            const getQData = (id) => ({
+                text: document.getElementById(`${id}-text`).value,
+                img: document.getElementById(`${id}-img`).value,
+                ans: [1,2,3,4,5].map(i => document.getElementById(`${id}-ans-${i}`).value),
+                correct: document.querySelector(`input[name="${id}-correct"]:checked`)?.value
+            });
 
-            const getQData = (id) => {
-                const correct = document.querySelector(`input[name="${id}-correct"]:checked`);
-                return {
-                    text: document.getElementById(`${id}-text`).value,
-                    img: document.getElementById(`${id}-img`).value,
-                    ans: [
-                        document.getElementById(`${id}-ans-1`).value,
-                        document.getElementById(`${id}-ans-2`).value,
-                        document.getElementById(`${id}-ans-3`).value,
-                        document.getElementById(`${id}-ans-4`).value,
-                        document.getElementById(`${id}-ans-5`).value
-                    ],
-                    correct: correct ? correct.value : null
-                };
-            };
-
-            const patternUrls = [];
-            for(let i=0; i<8; i++) patternUrls.push(document.getElementById(`pattern-${i}`).value);
+            const flashCards = [1,2,3].map(i => ({
+                front: document.getElementById(`flash-f-${i}`).value,
+                back: document.getElementById(`flash-b-${i}`).value,
+                img: document.getElementById(`flash-img-${i}`).value
+            }));
 
             const payload = {
-                theory: { title: document.getElementById('theoryTitle').value, text: document.getElementById('theoryText').value },
                 questions: { q1: getQData('q1'), q2: getQData('q2'), q3: getQData('q3') },
-                patterns: patternUrls,
-                flash: { front: document.getElementById('flashFront').value, back: document.getElementById('flashBack').value }
+                patterns: [0,1,2,3,4,5,6,7].map(i => document.getElementById(`pattern-${i}`).value),
+                flashCards: flashCards
             };
 
-            set(ref(db, 'booster/' + date), payload).then(() => {
-                alert("Published Successfully! ✅");
-                location.reload();
-            });
+            set(ref(db, 'booster/' + date), payload).then(() => alert("Data Published! ✅"));
         };
 
-        window.resetToday = () => {
-            if(confirm("අද දවසේ සියලු දත්ත මකා දමන්නද?")) {
-                set(ref(db, 'booster/' + today), null).then(() => location.reload());
-            }
-        };
-
-        checkDate();
+        initUI();
+        lucide.createIcons();
     </script>
 </body>
 </html>
