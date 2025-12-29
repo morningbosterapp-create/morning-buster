@@ -1,16 +1,73 @@
 <!DOCTYPE html>
-<html>
-<head><title>Teacher</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="p-10">
-    <h1 class="text-xl font-bold mb-5">Add Question</h1>
-    <input type="date" id="date" class="border p-2 mb-2 w-full">
-    <textarea id="q" placeholder="ප්‍රශ්නය" class="border p-2 mb-2 w-full"></textarea>
-    <input type="text" id="ans" placeholder="පිළිතුර (1 හෝ 2)" class="border p-2 mb-2 w-full">
-    <button onclick="save()" class="bg-black text-white p-3 w-full">Publish</button>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Booster | Teacher Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #050508; color: white; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 25px; }
+        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 12px; width: 100%; color: white; outline: none; }
+        .input-field:focus { border-color: #7000ff; }
+        .save-btn { background: linear-gradient(135deg, #7000ff, #ff007a); transition: all 0.3s; }
+        .save-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(112, 0, 255, 0.4); }
+    </style>
+</head>
+<body class="p-6 pb-20">
+
+    <div class="max-w-xl mx-auto space-y-8">
+        <header class="flex justify-between items-center bg-white/5 p-6 rounded-[2rem] border border-white/10">
+            <div>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">Teacher <span class="text-purple-500">Console</span></h1>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Update Today's Content</p>
+            </div>
+            <i data-lucide="layout-dashboard" class="text-purple-500"></i>
+        </header>
+
+        <section class="glass-card p-6">
+            <label class="text-[10px] font-bold text-purple-400 uppercase tracking-widest block mb-2">Publish Date</label>
+            <input type="date" id="targetDate" class="input-field">
+        </section>
+
+        <section class="glass-card p-6 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="book-open" class="w-4 h-4 text-purple-400"></i>
+                <h3 class="font-bold text-sm">Booster Question</h3>
+            </div>
+            <textarea id="mainQ" placeholder="ප්‍රශ්නය මෙතන ලියන්න..." class="input-field h-24"></textarea>
+            <input type="text" id="mainA" placeholder="නිවැරදි පිළිතුර" class="input-field">
+        </section>
+
+        <section class="glass-card p-6 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="youtube" class="w-4 h-4 text-pink-500"></i>
+                <h3 class="font-bold text-sm">Video Lesson (Optional)</h3>
+            </div>
+            <input type="url" id="videoUrl" placeholder="YouTube Video URL එක මෙතන දාන්න" class="input-field">
+        </section>
+
+        <section class="glass-card p-6 space-y-4 border-l-4 border-l-yellow-500">
+            <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="zap" class="w-4 h-4 text-yellow-500"></i>
+                <h3 class="font-bold text-sm">Flash Card (Quick Theory)</h3>
+            </div>
+            <input type="text" id="flashFront" placeholder="Front: ප්‍රශ්නය හෝ මාතෘකාව" class="input-field">
+            <textarea id="flashBack" placeholder="Back: කෙටි විස්තරය හෝ පිළිතුර" class="input-field h-20"></textarea>
+        </section>
+
+        <button onclick="publishData()" class="save-btn w-full py-5 rounded-[2rem] font-black text-sm tracking-[0.2em] uppercase flex items-center justify-center gap-3">
+            PUBLISH CONTENT <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
             authDomain: "morning-boster.firebaseapp.com",
@@ -20,15 +77,34 @@
             messagingSenderId: "465023464210",
             appId: "1:465023464210:web:1d53b1bd6185f2603fb9cb"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        window.save = function() {
-            const d = document.getElementById('date').value;
-            set(ref(db, 'booster/' + d), {
-                q: document.getElementById('q').value,
-                a: document.getElementById('ans').value
-            }).then(() => alert("Saved!"));
+        // අද දිනය default එක ලෙස දැමීම
+        document.getElementById('targetDate').value = new Date().toISOString().split('T')[0];
+        lucide.createIcons();
+
+        window.publishData = function() {
+            const date = document.getElementById('targetDate').value;
+            if(!date) return alert("කරුණාකර දිනයක් තෝරන්න!");
+
+            const data = {
+                q: document.getElementById('mainQ').value,
+                a: document.getElementById('mainA').value,
+                video: document.getElementById('videoUrl').value,
+                flash: {
+                    front: document.getElementById('flashFront').value,
+                    back: document.getElementById('flashBack').value
+                }
+            };
+
+            set(ref(db, 'booster/' + date), data).then(() => {
+                alert("අන්තර්ගතය සාර්ථකව පල කරන ලදී! ✅");
+                location.reload();
+            }).catch(err => {
+                alert("දෝෂයක් ඇතිවිය: " + err.message);
+            });
         }
     </script>
 </body>
