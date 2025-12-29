@@ -3,82 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booster Master | Teacher Console</title>
+    <title>Booster | Teacher Master Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #08090d; color: white; overflow-x: hidden; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; }
-        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
-        .input-box:focus { border-color: #8b5cf6; background: rgba(255,255,255,0.08); }
-        .tab-btn { padding: 12px 24px; border-radius: 16px; transition: 0.4s; cursor: pointer; font-weight: 700; font-size: 14px; }
-        .active-tab { background: #007bff; color: white; box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3); }
+        body { font-family: 'Outfit', sans-serif; background: #08090d; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
+        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: #8b5cf6; }
+        .tab-btn { padding: 10px 20px; border-radius: 12px; transition: 0.3s; cursor: pointer; font-weight: 600; }
+        .active-tab { background: #8b5cf6; color: white; }
         .hidden { display: none; }
-        .save-btn { background: linear-gradient(135deg, #7000ff, #ff007a); box-shadow: 0 15px 30px rgba(112, 0, 255, 0.3); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-4 md:p-10 pb-24">
+<body class="p-4 md:p-8 pb-20">
 
-    <div class="max-w-6xl mx-auto space-y-8">
+    <div class="max-w-5xl mx-auto space-y-6">
         
-        <div class="flex gap-4 mb-8">
-            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab">Home</div>
-            <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn bg-gray-800">Schedule Questions</div>
+        <div class="glass p-2 flex gap-2 overflow-x-auto no-scrollbar">
+            <div onclick="showTab('home')" id="btn-home" class="tab-btn active-tab flex items-center gap-2"><i data-lucide="home"></i> Home</div>
+            <div onclick="showTab('schedule')" id="btn-schedule" class="tab-btn flex items-center gap-2"><i data-lucide="calendar"></i> Schedule Questions</div>
         </div>
 
-        <div id="tab-home" class="space-y-8">
-            <h1 class="text-2xl font-bold">Hello sir, good morning!</h1>
+        <div id="tab-home" class="space-y-6 animate-fade-in">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass p-6">
+                    <h3 class="text-pink-500 font-bold mb-4 flex items-center gap-2 uppercase text-xs tracking-widest"><i data-lucide="alert-circle"></i> Question that very difficult (Top 10)</h3>
+                    <div id="difficult-list" class="space-y-3 text-sm opacity-70 italic">
+                        <p>දත්ත විශ්ලේෂණය වෙමින් පවතී...</p>
+                    </div>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="text-blue-400 font-bold mb-4 uppercase text-xs tracking-widest"><i data-lucide="trending-up"></i> Overall Student Progress</h3>
+                    <div class="h-48 bg-white/5 rounded-xl flex items-end justify-around p-4 gap-2">
+                        <div class="bg-blue-500 w-full rounded-t-lg transition-all duration-1000" style="height: 60%"></div>
+                        <div class="bg-purple-500 w-full rounded-t-lg transition-all duration-1000" style="height: 85%"></div>
+                        <div class="bg-pink-500 w-full rounded-t-lg transition-all duration-1000" style="height: 40%"></div>
+                    </div>
+                </div>
+            </div>
             
-            <div class="glass p-8 space-y-4 max-w-2xl">
-                <h3 class="text-lg font-bold">Questions that very difficult (Top 10)</h3>
-                <div class="glass bg-blue-500/20 p-10 rounded-2xl text-center">
-                    <p class="text-xl font-bold">Theory ()</p>
-                </div>
-            </div>
-
-            <div class="glass p-8 max-w-md">
-                <div class="h-40 flex items-end justify-around gap-2 border-b border-gray-700">
-                    <div class="bg-orange-500 w-2 h-24"></div>
-                    <div class="bg-blue-400 w-2 h-16"></div>
-                    <div class="bg-orange-500 w-2 h-32"></div>
-                </div>
-                <div class="flex gap-4 mt-4 text-xs">
-                    <span class="flex items-center gap-1"><div class="w-3 h-1 bg-orange-500"></div> Column 1</span>
-                    <span class="flex items-center gap-1"><div class="w-3 h-1 bg-blue-400"></div> Column 2</span>
-                </div>
+            <div class="glass p-6">
+                <h3 class="text-purple-400 font-bold mb-4 uppercase text-xs tracking-widest">Daily Theory Update</h3>
+                <input type="text" id="theory-title" class="input-box mb-3" placeholder="Theory Title (Ex: Unit 05 - Lesson 02)">
+                <textarea id="theory-text" class="input-box h-32" placeholder="අද දවසේ විශේෂ සිද්ධාන්තය ඇතුළත් කරන්න..."></textarea>
+                <button onclick="saveTheory()" class="mt-4 bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-xl font-bold transition">Update Theory Only</button>
             </div>
         </div>
 
-        <div id="tab-schedule" class="hidden space-y-8">
-            <div class="grid lg:grid-cols-12 gap-8">
-                
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="glass p-8">
-                        <input type="date" id="selected-date" class="input-box text-xl font-bold mb-4" onchange="checkDate()">
-                        <button id="reset-btn" onclick="resetToday()" class="w-full border border-red-500/30 text-red-500 py-3 rounded-2xl text-xs font-bold hidden">RESET TODAY</button>
+        <div id="tab-schedule" class="hidden space-y-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass p-6">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Select Date</h3>
+                    <input type="date" id="selected-date" class="input-box text-lg font-bold" onchange="loadDateContent()">
+                    <div id="edit-warning" class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-[10px] text-yellow-500 hidden leading-relaxed">
+                        ⚠️ පරණ දත්ත සංස්කරණය කළ නොහැක. අද දින දත්ත පමණක් Reset කළ හැක.
                     </div>
-
-                    <div class="glass p-8 space-y-4">
-                        <h3 class="text-xs font-bold text-blue-400 uppercase">Analysis URLs</h3>
-                        <div id="url-inputs" class="space-y-2"></div>
-                    </div>
+                    <button id="reset-btn" onclick="resetToday()" class="mt-4 w-full border border-red-500/30 text-red-500 py-3 rounded-xl text-xs font-bold hover:bg-red-500/10 transition hidden uppercase tracking-widest">RESET TODAY</button>
                 </div>
 
-                <div class="lg:col-span-8 space-y-8">
+                <div class="md:col-span-2 space-y-6">
                     
-                    <div id="questions-container" class="space-y-8">
+                    <div id="questions-wrapper" class="space-y-6">
                         </div>
 
-                    <div class="glass p-8 border-t-4 border-t-yellow-500 space-y-6">
-                        <h3 class="text-lg font-black text-yellow-500 uppercase italic">Flash Cards (3 Sets)</h3>
-                        
-                        <div id="flash-cards-container" class="space-y-8">
+                    <div class="glass p-6 space-y-4">
+                        <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest">Analysis Patterns (8 Video URLs)</h3>
+                        <div id="url-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             </div>
                     </div>
 
-                    <button onclick="publishData()" class="save-btn w-full py-6 rounded-[2rem] font-black text-sm tracking-[0.4em] uppercase flex items-center justify-center gap-4 transition-all">
-                        Publish Content <i data-lucide="send" class="w-5 h-5"></i>
+                    <div class="glass p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xs font-bold text-yellow-500 uppercase tracking-widest">Flash Cards Builder (3 Cards)</h3>
+                            <div class="flex items-center gap-3 text-[10px] font-bold">
+                                <button onclick="prevFlash()" class="p-2 bg-white/5 rounded-lg hover:bg-white/10 transition"><i data-lucide="chevron-left" class="w-3 h-3"></i></button>
+                                <span id="card-indicator">Card 1 / 3</span>
+                                <button onclick="nextFlash()" class="p-2 bg-white/5 rounded-lg hover:bg-white/10 transition"><i data-lucide="chevron-right" class="w-3 h-3"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div id="flash-card-inputs" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-[9px] uppercase mb-1 opacity-50">Front Side</p>
+                                    <textarea id="flash-front" class="input-box h-28 text-sm" placeholder="ප්‍රශ්නය හෝ මාතෘකාව..."></textarea>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] uppercase mb-1 opacity-50">Back Side</p>
+                                    <textarea id="flash-back" class="input-box h-28 text-sm" placeholder="පිළිතුර හෝ විස්තරය..."></textarea>
+                                </div>
+                            </div>
+                            <input type="text" id="flash-img" class="input-box text-xs" placeholder="Flash Card Image URL (Optional)">
+                        </div>
+                    </div>
+
+                    <button onclick="publishAll()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-5 rounded-2xl font-black tracking-[0.2em] uppercase mt-6 shadow-xl shadow-purple-900/20 hover:scale-[1.01] transition-all">
+                        Publish To Students
                     </button>
                 </div>
             </div>
@@ -87,7 +110,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
@@ -102,83 +125,110 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const today = new Date().toISOString().split('T')[0];
+        let currentFlashIdx = 0;
+        let flashData = [ {f:'', b:'', img:''}, {f:'', b:'', img:''}, {f:'', b:'', img:''} ];
 
-        // UI Generation
+        // --- UI Initialization ---
         const initUI = () => {
             // Questions
             let qHtml = '';
-            ['q1', 'q2', 'q3'].forEach((q, idx) => {
-                qHtml += `
-                <div class="glass p-8 border-l-8 border-l-purple-600 space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h4 class="font-black text-purple-500 text-xl italic uppercase">Question 0${idx+1}</h4>
-                        <input type="text" id="${q}-img" class="input-box w-1/2 text-[10px]" placeholder="Image URL">
-                    </div>
-                    <textarea id="${q}-text" class="input-box h-24" placeholder="ප්‍රශ්නය ලියන්න..."></textarea>
-                    <div class="space-y-2">
-                        ${[1,2,3,4,5].map(i => `
-                            <div class="flex items-center gap-3 bg-white/5 p-2 rounded-xl border border-white/5">
-                                <input type="radio" name="${q}-correct" value="${i}" class="w-5 h-5 accent-purple-500">
-                                <input type="text" id="${q}-ans-${i}" class="bg-transparent border-none outline-none text-sm w-full" placeholder="Answer ${i}">
-                            </div>`).join('')}
-                    </div>
-                </div>`;
-            });
-            document.getElementById('questions-container').innerHTML = qHtml;
-
-            // Flash Cards
-            let fHtml = '';
             for(let i=1; i<=3; i++) {
-                fHtml += `
-                <div class="p-6 bg-white/5 rounded-2xl border border-yellow-500/20 space-y-4">
-                    <p class="text-[10px] font-bold text-yellow-500 uppercase">Flash Card 0${i} (Adala Question 0${i})</p>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <textarea id="flash-f-${i}" class="input-box h-20 text-xs" placeholder="Front Side Text"></textarea>
-                        <textarea id="flash-b-${i}" class="input-box h-20 text-xs" placeholder="Back Side Text"></textarea>
+                qHtml += `
+                <div class="glass p-6 border-l-4 border-l-purple-500 space-y-4">
+                    <span class="text-[10px] font-black text-purple-400 uppercase">Booster Question 0${i}</span>
+                    <textarea id="q${i}-text" class="input-box text-sm h-20" placeholder="ප්‍රශ්නය ලියන්න..."></textarea>
+                    <input type="text" id="q${i}-img" class="input-box text-[10px]" placeholder="Question Image URL (Optional)">
+                    <div class="space-y-2 mt-2">
+                        <p class="text-[9px] font-bold opacity-40 uppercase ml-1">Answers (Tick Correct One)</p>
+                        ${[1,2,3,4,5].map(ansNum => `
+                            <div class="flex items-center gap-3 bg-white/5 p-2 rounded-xl border border-white/5">
+                                <input type="radio" name="q${i}-correct" value="${ansNum}" class="w-4 h-4 accent-purple-500">
+                                <input type="text" id="q${i}-ans-${ansNum}" class="bg-transparent border-none outline-none text-sm w-full" placeholder="පිළිතුර ${ansNum}">
+                            </div>
+                        `).join('')}
                     </div>
-                    <input type="text" id="flash-img-${i}" class="input-box text-[10px]" placeholder="Flash Card Image URL (Optional)">
                 </div>`;
             }
-            document.getElementById('flash-cards-container').innerHTML = fHtml;
+            document.getElementById('questions-wrapper').innerHTML = qHtml;
 
             // Pattern URLs
             const patterns = ["(1) හරි, (2) වැරදි, (3) වැරදි", "(1) වැරදි, (2) හරි, (3) වැරදි", "(1) වැරදි, (2) වැරදි, (3) හරි", "(1) හරි, (2) හරි, (3) වැරදි", "(1) හරි, (2) වැරදි, (3) හරි", "(1) වැරදි, (2) හරි, (3) හරි", "(1) හරි, (2) හරි, (3) හරි", "(1) වැරදි, (2) වැරදි, (3) වැරදි"];
-            document.getElementById('url-inputs').innerHTML = patterns.map((p, i) => `<input type="url" id="pattern-${i}" class="input-box text-[10px]" placeholder="${p} URL">`).join('');
+            document.getElementById('url-inputs').innerHTML = patterns.map((p, i) => `<input type="url" id="pattern-${i}" class="input-box text-[10px]" placeholder="${p} Video URL">`).join('');
+            
+            lucide.createIcons();
+            document.getElementById('selected-date').value = today;
+            updateFlashUI();
         };
 
+        // --- Flash Card Logic ---
+        window.updateFlashUI = () => {
+            document.getElementById('flash-front').value = flashData[currentFlashIdx].f;
+            document.getElementById('flash-back').value = flashData[currentFlashIdx].b;
+            document.getElementById('flash-img').value = flashData[currentFlashIdx].img;
+            document.getElementById('card-indicator').innerText = `Card ${currentFlashIdx + 1} / 3`;
+        };
+
+        window.saveCurrentFlash = () => {
+            flashData[currentFlashIdx] = {
+                f: document.getElementById('flash-front').value,
+                b: document.getElementById('flash-back').value,
+                img: document.getElementById('flash-img').value
+            };
+        };
+
+        window.nextFlash = () => { if(currentFlashIdx < 2) { saveCurrentFlash(); currentFlashIdx++; updateFlashUI(); } };
+        window.prevFlash = () => { if(currentFlashIdx > 0) { saveCurrentFlash(); currentFlashIdx--; updateFlashUI(); } };
+
+        // --- Tab Logic ---
         window.showTab = (tab) => {
-            document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
-            document.getElementById('tab-schedule').classList.toggle('hidden', tab !== 'schedule');
-            document.getElementById('btn-home').className = tab === 'home' ? 'tab-btn active-tab' : 'tab-btn bg-gray-800';
-            document.getElementById('btn-schedule').className = tab === 'schedule' ? 'tab-btn active-tab' : 'tab-btn bg-gray-800';
+            document.getElementById('tab-home').classList.add('hidden');
+            document.getElementById('tab-schedule').classList.add('hidden');
+            document.getElementById('btn-home').classList.remove('active-tab');
+            document.getElementById('btn-schedule').classList.remove('active-tab');
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active-tab');
         };
 
-        window.publishData = function() {
+        window.loadDateContent = () => {
             const date = document.getElementById('selected-date').value;
-            const getQData = (id) => ({
-                text: document.getElementById(`${id}-text`).value,
-                img: document.getElementById(`${id}-img`).value,
-                ans: [1,2,3,4,5].map(i => document.getElementById(`${id}-ans-${i}`).value),
-                correct: document.querySelector(`input[name="${id}-correct"]:checked`)?.value
+            const isToday = (date === today);
+            document.getElementById('reset-btn').classList.toggle('hidden', !isToday);
+            document.getElementById('edit-warning').classList.toggle('hidden', isToday);
+        };
+
+        // --- Database Logic ---
+        window.publishAll = () => {
+            saveCurrentFlash(); // අවසාන flash card එකත් සේව් කරන්න
+            const date = document.getElementById('selected-date').value;
+
+            const getQData = (n) => ({
+                text: document.getElementById(`q${n}-text`).value,
+                img: document.getElementById(`q${n}-img`).value,
+                answers: [1,2,3,4,5].map(i => document.getElementById(`q${n}-ans-${i}`).value),
+                correct: document.querySelector(`input[name="q${n}-correct"]:checked`)?.value
             });
 
-            const flashCards = [1,2,3].map(i => ({
-                front: document.getElementById(`flash-f-${i}`).value,
-                back: document.getElementById(`flash-b-${i}`).value,
-                img: document.getElementById(`flash-img-${i}`).value
-            }));
-
             const payload = {
-                questions: { q1: getQData('q1'), q2: getQData('q2'), q3: getQData('q3') },
+                questions: { q1: getQData(1), q2: getQData(2), q3: getQData(3) },
                 patterns: [0,1,2,3,4,5,6,7].map(i => document.getElementById(`pattern-${i}`).value),
-                flashCards: flashCards
+                flashCards: flashData
             };
 
-            set(ref(db, 'booster/' + date), payload).then(() => alert("Data Published! ✅"));
+            set(ref(db, 'booster/' + date), payload).then(() => {
+                alert("ප්‍රශ්න පත්‍රය සාර්ථකව පල කරන ලදී! ✅");
+            });
+        };
+
+        window.saveTheory = () => {
+            const theory = { 
+                title: document.getElementById('theory-title').value,
+                text: document.getElementById('theory-text').value 
+            };
+            set(ref(db, 'booster/currentTheory'), theory).then(() => alert("Theory Updated! ✅"));
         };
 
         initUI();
-        lucide.createIcons();
+        loadDateContent();
     </script>
 </body>
 </html>
