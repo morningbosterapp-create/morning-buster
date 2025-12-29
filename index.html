@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white flex flex-col items-center p-10">
+    <h1 class="text-2xl font-bold mb-5">Register Here</h1>
+    <input type="text" id="name" placeholder="ඔබේ නම" class="p-3 mb-3 text-black rounded w-64">
+    <input type="tel" id="phone" placeholder="WhatsApp අංකය" class="p-3 mb-3 text-black rounded w-64">
+    <button onclick="reg()" class="bg-purple-600 p-3 rounded w-64">Register</button>
+    <br><br>
+    <p>ID එකක් තිබේද? <a href="student.html" class="text-blue-400">Login</a></p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
+            authDomain: "morning-boster.firebaseapp.com",
+            databaseURL: "https://morning-boster-default-rtdb.firebaseio.com",
+            projectId: "morning-boster",
+            storageBucket: "morning-boster.firebasestorage.app",
+            messagingSenderId: "465023464210",
+            appId: "1:465023464210:web:1d53b1bd6185f2603fb9cb"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.reg = function() {
+            const id = Math.floor(1000 + Math.random() * 9000);
+            const n = document.getElementById('name').value;
+            set(ref(db, 'users/' + id), { name: n, monthKey: "123" }).then(() => {
+                alert("ඔබේ ID එක: " + id);
+                location.href = "student.html";
+            });
+        }
+    </script>
+</body>
+</html>
