@@ -3,57 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Morning Booster | Premium Dashboard</title>
+    <title>Morning Booster | Pro Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { background: #050508; color: white; font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 2rem; }
-        .booster-btn { background: linear-gradient(135deg, #4f46e5, #9333ea); transition: all 0.3s ease; }
-        .booster-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(79, 70, 229, 0.4); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg-dark: #030306;
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism 2.0 Effect */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2.5rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .xp-bar-inner {
+            width: 65%; /* This will be dynamic later */
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            border-radius: inherit;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 35px -5px rgba(79, 70, 229, 0.5);
+        }
+
+        .leaderboard-item {
+            transition: background 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-anim { animation: float 4s ease-in-out infinite; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
-<body class="p-6">
-    <div class="max-w-md mx-auto space-y-6">
+<body class="p-4 md:p-8">
+
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 blur-[120px] -z-10"></div>
+
+    <div class="max-w-2xl mx-auto space-y-8 animate__animated animate__fadeIn">
         
-        <div class="flex justify-between items-center px-2">
-            <div>
-                <h1 class="text-2xl font-black italic tracking-tighter">MORNING <span class="text-indigo-500">BOOSTER</span></h1>
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Performance Dashboard</p>
+        <header class="flex justify-between items-center bg-white/5 p-6 rounded-[2.5rem] border border-white/10">
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[2px]">
+                        <div class="w-full h-full bg-slate-900 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="user" class="text-indigo-400"></i>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-slate-900 rounded-full"></div>
+                </div>
+                <div>
+                    <h2 class="font-extrabold text-lg leading-tight" id="userName">Student Name</h2>
+                    <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Level 12 • Pro Member</p>
+                </div>
             </div>
-            <div class="w-10 h-10 glass-card flex items-center justify-center text-indigo-400 border border-indigo-500/20">
-                <i class="fas fa-chart-line"></i>
+            <div class="text-right">
+                <div class="flex items-center gap-2 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                    <i data-lucide="zap" class="w-3 h-3 text-indigo-400 fill-indigo-400"></i>
+                    <span class="text-xs font-black text-indigo-400">1,240 XP</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="px-2">
+            <div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter mb-2 text-gray-400">
+                <span>Next Level Progress</span>
+                <span>65% to Level 13</span>
+            </div>
+            <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden p-[2px] border border-white/5">
+                <div class="xp-bar-inner"></div>
             </div>
         </div>
 
-        <div class="glass-card p-6">
-            <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Weekly Progress</h3>
-            <canvas id="myChart" height="150"></canvas>
-        </div>
+        <section class="glass-panel p-8">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Weekly Growth</h3>
+                    <p class="text-2xl font-black gradient-text">+24.5%</p>
+                </div>
+                <div class="flex gap-2">
+                    <div class="w-2 h-8 bg-indigo-500/20 rounded-full"></div>
+                    <div class="w-2 h-12 bg-indigo-500/40 rounded-full"></div>
+                    <div class="w-2 h-10 bg-indigo-500 rounded-full shadow-[0_0_10px_#6366f1]"></div>
+                </div>
+            </div>
+            <canvas id="performanceChart" height="140"></canvas>
+        </section>
 
-        <div class="glass-card p-8 bg-gradient-to-br from-indigo-600/10 to-transparent border-l-4 border-indigo-500">
-            <p class="text-[10px] font-bold text-indigo-400 uppercase mb-2">Today's Mission</p>
-            <h2 class="text-2xl font-bold mb-4" id="qText">Loading Question...</h2>
-            <button id="startBtn" onclick="runTask()" class="hidden booster-btn w-full py-4 rounded-2xl font-black text-sm uppercase">Solve & Earn XP</button>
-        </div>
+        <section class="glass-panel p-8 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i data-lucide="brain-circuit" class="w-24 h-24"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-indigo-500/20 rounded-lg">
+                        <i data-lucide="calendar" class="w-4 h-4 text-indigo-400"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-widest" id="dateStr">December 29, 2025</span>
+                </div>
+                <h1 class="text-3xl font-black mb-6 leading-tight" id="qText">Loading today's challenge...</h1>
+                <div class="flex flex-col gap-3">
+                    <button onclick="runTask()" id="startBtn" class="hidden btn-premium w-full py-5 rounded-[2rem] font-black text-sm tracking-[0.2em] uppercase">
+                        ATTEMPT CHALLENGE
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <div class="grid grid-cols-2 gap-4">
-            <div class="glass-card p-5 text-center">
-                <p class="text-2xl font-black text-indigo-400">07</p>
-                <p class="text-[10px] text-gray-500 uppercase font-bold">Day Streak</p>
+            <div class="glass-panel p-6 flex flex-col items-center justify-center gap-2 border-b-4 border-b-orange-500/50">
+                <i data-lucide="flame" class="text-orange-500 w-6 h-6"></i>
+                <span class="text-2xl font-black">14</span>
+                <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Day Streak</span>
             </div>
-            <div class="glass-card p-5 text-center">
-                <p class="text-2xl font-black text-purple-400">85%</p>
-                <p class="text-[10px] text-gray-500 uppercase font-bold">Accuracy</p>
+            <div class="glass-panel p-6 flex flex-col items-center justify-center gap-2 border-b-4 border-b-blue-500/50">
+                <i data-lucide="trophy" class="text-blue-500 w-6 h-6"></i>
+                <span class="text-2xl font-black">#08</span>
+                <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Global Rank</span>
             </div>
         </div>
 
+        <section class="glass-panel overflow-hidden">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <h3 class="font-black text-sm uppercase tracking-widest">Top Performers</h3>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-600"></i>
+            </div>
+            <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                <div class="leaderboard-item p-4 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-indigo-500 w-4">1</span>
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold">AS</div>
+                        <span class="text-sm font-bold">Amali Silva</span>
+                    </div>
+                    <span class="text-xs font-black opacity-60">2,450 XP</span>
+                </div>
+                <div class="leaderboard-item p-4 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-gray-500 w-4">2</span>
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold">KP</div>
+                        <span class="text-sm font-bold">Kasun Perera</span>
+                    </div>
+                    <span class="text-xs font-black opacity-60">2,100 XP</span>
+                </div>
+                <div class="leaderboard-item p-4 flex justify-between items-center bg-indigo-500/5">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-indigo-400 w-4">8</span>
+                        <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-[10px] font-bold text-indigo-400 italic">ME</div>
+                        <span class="text-sm font-bold text-indigo-300">You (Current)</span>
+                    </div>
+                    <span class="text-xs font-black text-indigo-400">1,240 XP</span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-10">
+            <p class="text-[8px] font-bold text-gray-600 tracking-[1em] uppercase">Advanced Learning OS • Nudara Dev</p>
+        </footer>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
             authDomain: "morning-boster.firebaseapp.com",
@@ -67,49 +222,78 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const today = new Date().toISOString().split('T')[0];
+        const studentID = localStorage.getItem("currentStudent");
         let correctAns = "";
 
-        // Graph එක හදමු
-        const ctx = document.getElementById('myChart').getContext('2d');
+        // Icons සාදා ගැනීම
+        lucide.createIcons();
+
+        // නම පෙන්වීම
+        if(studentID) {
+            get(ref(db, `users/${studentID}`)).then(s => {
+                if(s.exists()) document.getElementById('userName').innerText = s.val().name;
+            });
+        }
+
+        // Chart.js - Line Graph Setup
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
                 datasets: [{
-                    label: 'Score',
-                    data: [12, 19, 15, 25, 22, 30, 28], // මේවා පසුව Database එකෙන් ගමු
+                    data: [35, 45, 38, 55, 48, 70, 65],
                     borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    fill: true,
+                    borderWidth: 4,
+                    pointBackgroundColor: '#6366f1',
+                    pointBorderColor: '#030306',
+                    pointBorderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
                     tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 0
+                    fill: true,
+                    backgroundColor: gradient
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { 
-                    x: { grid: { display: false }, ticks: { color: '#4b5563', font: { size: 10 } } },
-                    y: { display: false }
+                scales: {
+                    y: { display: false },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#4b5563', font: { size: 10, weight: 'bold' } }
+                    }
                 }
             }
         });
 
-        // ප්‍රශ්නය පෙන්වීම
+        // දත්ත ලබාගැනීම
         onValue(ref(db, 'booster/' + today), (snap) => {
-            if(snap.exists()) {
-                document.getElementById('qText').innerText = snap.val().q;
-                correctAns = snap.val().a;
+            const data = snap.val();
+            if(data) {
+                document.getElementById('qText').innerText = data.q;
+                correctAns = data.a;
                 document.getElementById('startBtn').classList.remove('hidden');
+                document.getElementById('startBtn').classList.add('animate__animated', 'animate__fadeInUp');
             } else {
                 document.getElementById('qText').innerText = "ප්‍රශ්න පත්‍රය ලැබෙන තෙක් රැඳී සිටින්න.";
             }
         });
 
         window.runTask = function() {
-            const u = prompt("පිළිතුර ඇතුල් කරන්න:");
-            if(u == correctAns) alert("නිවැරදියි! 🏆");
-            else alert("වැරදියි! නැවත උත්සාහ කරන්න.");
+            const u = prompt("Challenge Answer ඇතුල් කරන්න:");
+            if(u == correctAns) {
+                alert("CONGRATULATIONS! 🏆\n\nඔබ අද අභියෝගය ජයගත්තා. XP +50 එකතු වුණා!");
+                // මෙතනදී XP update කරන logic එක ඉදිරියට හදමු
+            } else {
+                alert("වැරදියි! ❌\nනැවත උත්සාහ කර XP දිනාගන්න.");
+            }
         };
     </script>
 </body>
