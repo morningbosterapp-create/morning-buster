@@ -1,15 +1,101 @@
 <!DOCTYPE html>
-<html>
-<head><title>Student</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-black text-white p-10">
-    <div id="box" class="bg-gray-900 p-5 rounded-xl border border-gray-700">
-        <h2 id="qText">ප්‍රශ්නය පූරණය වේ...</h2>
-        <button onclick="check()" class="bg-blue-600 p-3 mt-5 w-full rounded">පිළිතුර ලබා දෙන්න</button>
-    </div>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Booster | Student Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            background: #0a0b10; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+        
+        /* අර පින්තූරේ වගේ වීදුරු පෙනුම (Glassmorphism) */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 2.5rem; 
+        }
+
+        /* Gradient බොත්තම */
+        .booster-btn { 
+            background: linear-gradient(135deg, #6366f1, #a855f7); 
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+        .booster-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4); }
+
+        /* පශ්චාත් තලයේ එළිය (Glow Effect) */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 300px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="pb-20">
+    <div class="bg-glow"></div>
+
+    <header class="p-8 flex justify-between items-center max-w-lg mx-auto">
+        <div>
+            <p class="text-[10px] font-bold text-gray-500 tracking-[0.3em] uppercase mb-1">Welcome Back</p>
+            <h1 class="text-2xl font-black italic tracking-tighter">MORNING <span class="text-indigo-500">BOOSTER</span></h1>
+        </div>
+        <div class="w-12 h-12 glass-card flex items-center justify-center text-indigo-400 border border-indigo-500/20">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+    </header>
+
+    <main class="px-6 space-y-8 max-w-lg mx-auto">
+        
+        <div class="glass-card p-10 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="w-2 h-2 bg-indigo-500 rounded-full animate-ping"></span>
+                    <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest" id="statusHeader">Status: Checking...</p>
+                </div>
+                <h2 class="text-3xl font-black mb-6 leading-tight" id="mainTitle">අද දවසේ <br>අභියෝගය</h2>
+                <div id="qArea" class="mb-8 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <p id="qText" class="text-gray-300 italic">"ප්‍රශ්න පත්‍රය පූරණය වෙමින් පවතී..."</p>
+                </div>
+                <button id="startBtn" onclick="runTask()" class="hidden booster-btn w-full py-5 rounded-[2rem] font-black tracking-widest uppercase text-sm">
+                    START NOW
+                </button>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="glass-card p-6 flex flex-col items-center justify-center">
+                <i class="fas fa-fire text-orange-500 mb-2"></i>
+                <p class="text-xl font-black">01</p>
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Streak</p>
+            </div>
+            <div class="glass-card p-6 flex flex-col items-center justify-center">
+                <i class="fas fa-star text-yellow-500 mb-2"></i>
+                <p class="text-xl font-black">Ready</p>
+                <p class="text-[10px] text-gray-500 uppercase font-bold">Today</p>
+            </div>
+        </div>
+
+        <footer class="text-center opacity-30 py-10">
+            <p class="text-[8px] font-bold tracking-[0.5em] uppercase">Built for Success • 2025</p>
+        </footer>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
             authDomain: "morning-boster.firebaseapp.com",
@@ -19,26 +105,35 @@
             messagingSenderId: "465023464210",
             appId: "1:465023464210:web:1d53b1bd6185f2603fb9cb"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
+        
         const today = new Date().toISOString().split('T')[0];
         let correctAns = "";
 
-        onValue(ref(db, 'booster/' + today), (s) => {
-            if(s.exists()){
-                document.getElementById('qText').innerText = s.val().q;
-                correctAns = s.val().a;
+        // දත්ත ලබාගැනීම
+        onValue(ref(db, 'booster/' + today), (snap) => {
+            const data = snap.val();
+            if(data) {
+                document.getElementById('statusHeader').innerText = "Status: Paper is Ready";
+                document.getElementById('qText').innerText = data.q;
+                correctAns = data.a;
+                document.getElementById('startBtn').classList.remove('hidden');
             } else {
-                document.getElementById('qText').innerText = "අදට ප්‍රශ්න නැත.";
+                document.getElementById('statusHeader').innerText = "Status: Waiting for Teacher";
+                document.getElementById('qText').innerText = "අද දිනට තවමත් ප්‍රශ්න ඇතුළත් කර නැත.";
             }
         });
 
-        window.check = function() {
+        window.runTask = function() {
             const u = prompt("පිළිතුර ඇතුල් කරන්න:");
-            if(u == correctAns) alert("නිවැරදියි! 🎉");
-            else alert("වැරදියි! ❌");
-        }
+            if(u == correctAns) {
+                alert("විශිෂ්ටයි! පිළිතුර නිවැරදියි. 🎉");
+            } else {
+                alert("පිළිතුර වැරදියි. උත්සාහ කරන්න! ❌");
+            }
+        };
     </script>
 </body>
 </html>
