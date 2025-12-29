@@ -2,172 +2,102 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Morning Booster | Premium Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Booster | Student Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-
-        :root {
-            --bg-deep: #0a0b10;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-primary: #7000ff;
-            --accent-secondary: #ff007a;
-            --text-glow: 0 0 15px rgba(112, 0, 255, 0.5);
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1a1b26 0%, var(--bg-deep) 100%);
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
-        }
-
-        .bg-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: var(--accent-primary);
-            filter: blur(120px);
-            border-radius: 50%;
-            z-index: -1;
-            animation: pulse-slow 8s infinite ease-in-out;
-        }
-
-        .booster-button {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 25px rgba(112, 0, 255, 0.4);
-        }
-
-        .booster-button:active {
-            transform: scale(0.92);
-            filter: brightness(1.2);
-        }
-
-        .nav-item { transition: all 0.3s ease; color: #555; }
-        .nav-item.active { color: #ffffff; text-shadow: var(--text-glow); }
-
-        .snap-x-container {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 15px;
-            padding: 10px 0;
-        }
-        .snap-item { scroll-snap-align: start; flex: 0 0 85%; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        body { font-family: 'Outfit', sans-serif; background: #050508; color: white; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 30px; }
+        .btn-gradient { background: linear-gradient(135deg, #7000ff, #ff007a); transition: 0.4s; }
+        .btn-gradient:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(112, 0, 255, 0.4); }
+        .hidden { display: none; }
+        input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 12px; color: white; outline: none; }
     </style>
 </head>
-<body class="pb-32">
+<body class="p-4 md:p-6">
 
-    <div class="bg-glow" style="top: -50px; left: -50px; background: var(--accent-secondary);"></div>
-    <div class="bg-glow" style="bottom: 50px; right: -50px;"></div>
+    <div id="login-screen" class="min-h-screen flex items-center justify-center animate-in fade-in duration-700">
+        <div class="glass p-10 w-full max-w-md text-center space-y-6">
+            <h1 class="text-3xl font-black italic tracking-tighter italic">BOOSTER <span class="text-purple-500">PRO</span></h1>
+            <p class="text-xs text-gray-400 uppercase tracking-widest">Enter your credentials to study</p>
+            <div class="flex flex-col gap-4 text-left">
+                <label class="text-[10px] font-bold uppercase ml-2">Student ID</label>
+                <input type="text" id="student-id" placeholder="Ex: MB-1024">
+                <label class="text-[10px] font-bold uppercase ml-2">Month Key (Active Month)</label>
+                <input type="password" id="month-key" placeholder="••••••••">
+            </div>
+            <button onclick="handleLogin()" class="btn-gradient w-full py-4 rounded-2xl font-black tracking-widest">LOGIN NOW</button>
+        </div>
+    </div>
 
-    <header class="p-8 flex justify-between items-center">
-        <div>
-            <h4 class="text-xs font-bold text-gray-500 tracking-[0.3em] uppercase mb-1">Morning Booster</h4>
-            <div class="flex items-center gap-2">
-                <h1 class="text-3xl font-extrabold tracking-tight">Ayubowan, <span id="stuNameDisplay" class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Student</span></h1>
+    <div id="dashboard" class="hidden max-w-2xl mx-auto space-y-6 pb-24 animate-in slide-in-from-bottom-10 duration-700">
+        
+        <header class="glass p-6 flex items-center gap-6">
+            <div class="w-20 h-20 rounded-2xl border-2 border-purple-500 overflow-hidden">
+                <img src="1.p" alt="Teacher" class="w-full h-full object-cover">
+            </div>
+            <div>
+                <h2 id="greeting" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Good Morning,</h2>
+                <h1 class="text-2xl font-black tracking-tighter italic" id="display-name">STUDENT</h1>
+                <p class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full inline-block mt-2">Theory: Unit 05 - Kinetic</p>
+            </div>
+        </header>
+
+        <div id="status-card" class="glass p-8 text-center space-y-4 border-t-4 border-purple-500">
+            <i data-lucide="zap" class="w-12 h-12 text-yellow-500 mx-auto"></i>
+            <h3 class="text-xl font-bold">Today's Booster is Ready!</h3>
+            <p class="text-gray-400 text-sm">ප්‍රශ්න 3යි, විනාඩි 5යි. ඔබ සූදානම්ද?</p>
+            <button onclick="startBooster()" class="btn-gradient px-10 py-4 rounded-full font-black">START TODAY BOOSTER</button>
+        </div>
+
+        <div id="done-card" class="glass p-8 text-center space-y-4 border-t-4 border-green-500 hidden">
+            <i data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto"></i>
+            <h3 class="text-xl font-bold">Already Done for Today!</h3>
+            <p class="text-gray-400 text-sm">හෙට නැවත හමුවෙමු. ඔබේ රිකවරි බලන්න.</p>
+        </div>
+
+        <div class="glass p-6">
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Your Performance</h3>
+            <div class="h-32 flex items-end gap-2 px-4">
+                <div class="bg-purple-600/40 w-full h-[30%] rounded-t-lg"></div>
+                <div class="bg-purple-600/60 w-full h-[60%] rounded-t-lg"></div>
+                <div class="bg-purple-600 w-full h-[85%] rounded-t-lg"></div>
+                <div class="bg-purple-500 w-full h-[40%] rounded-t-lg"></div>
+            </div>
+            <div class="flex justify-between mt-4 text-[10px] font-bold text-gray-500">
+                <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
             </div>
         </div>
-        <div class="relative group">
-            <div class="w-14 h-14 rounded-[20px] bg-gradient-to-br from-purple-600 to-pink-600 p-[2px] shadow-lg">
-                <img src="https://i.pravatar.cc/150?u=nethmina" class="w-full h-full rounded-[18px] object-cover" alt="Profile">
+
+        <div class="glass p-6 space-y-4">
+            <h3 class="text-xs font-bold text-pink-500 uppercase tracking-widest flex items-center gap-2">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i> Recovery (Space Repetition)
+            </h3>
+            <div id="recovery-items" class="space-y-3">
+                <p class="text-xs text-gray-500 italic">අදට රිකවරි කිරීමට කිසිවක් නැත.</p>
             </div>
-            <div class="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-4 border-[#0a0b10] rounded-full"></div>
         </div>
-    </header>
+    </div>
 
-    <main class="px-6 space-y-10">
-
-        <section class="glass-card p-1 relative overflow-hidden group">
-            <div class="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-50"></div>
-            <div class="p-8 relative z-10">
-                <div class="flex justify-between items-start mb-10">
-                    <div>
-                        <p class="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-2">Today's Focus</p>
-                        <h2 class="text-2xl font-black italic" id="boosterTitle">UNIT: LOADING...</h2>
-                    </div>
-                    <div class="w-12 h-12 glass-card rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-bolt text-yellow-400"></i>
-                    </div>
+    <div id="booster-ui" class="hidden fixed inset-0 bg-[#050508] z-50 p-6">
+        <div class="max-w-xl mx-auto h-full flex flex-col justify-center space-y-8">
+            <div id="q-step" class="space-y-6 animate-in slide-in-from-right-10 duration-500">
+                <span id="q-num" class="text-purple-500 font-black text-4xl">01</span>
+                <div id="q-img-box" class="hidden w-full h-48 rounded-2xl overflow-hidden border border-white/10 mb-4">
+                    <img id="q-img" src="" class="w-full h-full object-cover">
                 </div>
-
-                <div class="flex items-end justify-between">
-                    <div>
-                        <p class="text-3xl font-extrabold tracking-tighter">Booster Paper</p>
-                        <p class="text-[10px] text-gray-400 mt-1 italic font-medium">Click below to start your session</p>
+                <h2 id="q-text" class="text-2xl font-bold leading-tight">Loading Question...</h2>
+                <div id="options" class="space-y-3">
                     </div>
-                    <div class="text-right">
-                        <span class="text-xs font-bold px-3 py-1 bg-white/10 rounded-full">Active</span>
-                    </div>
-                </div>
-
-                <button id="startBoosterBtn" onclick="startBooster()" class="booster-button w-full mt-8 py-5 rounded-[25px] font-extrabold text-sm tracking-widest uppercase flex items-center justify-center gap-3">
-                    Start Today Booster <i class="fas fa-play text-[10px]"></i>
-                </button>
             </div>
-        </section>
-
-        <section id="recoverySection">
-            <div class="flex justify-between items-center mb-5">
-                <h3 class="text-lg font-extrabold tracking-tight">Recovery Cards <span class="text-pink-500 ml-1">·</span></h3>
-                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Swipe <i class="fas fa-arrow-right ml-1"></i></span>
-            </div>
-            <div id="recoveryContainer" class="snap-x-container no-scrollbar">
-                <div class="snap-item glass-card p-6 border-l-4 border-purple-500 flex flex-col justify-between h-44 bg-gradient-to-br from-white/5 to-transparent">
-                    <p class="text-sm font-semibold text-gray-200">පාඩම් අවසානයේ වැරදුණු ප්‍රශ්න මෙහි දිස්වේ.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="glass-card p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-lg font-extrabold tracking-tight">Your Progress</h3>
-                <select class="bg-transparent text-[10px] font-bold text-gray-400 outline-none">
-                    <option>This Week</option>
-                </select>
-            </div>
-            <div class="relative h-48">
-                <canvas id="mobilePremiumChart"></canvas>
-            </div>
-        </section>
-
-    </main>
-
-    <nav class="fixed bottom-6 left-6 right-6 z-50">
-        <div class="glass-card py-5 px-10 flex justify-between items-center shadow-[0_-10px_50px_rgba(0,0,0,0.8)] border-t border-white/10">
-            <button class="nav-item active"><i class="fas fa-th-large text-xl"></i></button>
-            <button class="nav-item"><i class="fas fa-graduation-cap text-xl"></i></button>
-            <button class="nav-item"><i class="fas fa-fire-alt text-xl"></i></button>
-            <button class="nav-item"><i class="fas fa-cog text-xl"></i></button>
         </div>
-    </nav>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD1Kt-b-bb6HhY0k_Yb72MrKZukC0hdm0k",
@@ -181,92 +111,161 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const studentID = localStorage.getItem("currentStudent");
         const today = new Date().toISOString().split('T')[0];
 
-        let activeQuestion = null;
+        let studentData = null;
+        let currentBooster = null;
+        let answers = [];
+        let currentQIdx = 0;
 
-        // 1. Get Student Info
-        if(studentID) {
-            get(ref(db, 'users/' + studentID)).then((snap) => {
-                if(snap.exists()) {
-                    document.getElementById('stuNameDisplay').innerText = snap.val().name;
-                }
+        // --- Logic: Authentication ---
+        window.handleLogin = async () => {
+            const id = document.getElementById('student-id').value;
+            const key = document.getElementById('month-key').value;
+            
+            if(id && key === "2024DEC") { // Example key logic
+                localStorage.setItem('studentId', id);
+                loadDashboard(id);
+            } else {
+                alert("වැරදි Student ID හෝ Month Key එකක්!");
+            }
+        };
+
+        // --- Logic: Dashboard ---
+        async function loadDashboard(id) {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('display-name').innerText = id;
+            
+            const hr = new Date().getHours();
+            document.getElementById('greeting').innerText = hr < 12 ? "Good Morning," : hr < 18 ? "Good Afternoon," : "Good Evening,";
+
+            // Load Today's Data
+            const snapshot = await get(ref(db, 'booster/' + today));
+            if(snapshot.exists()) {
+                currentBooster = snapshot.val();
+                checkIfDone(id);
+            }
+            loadRecovery(id);
+            lucide.createIcons();
+        }
+
+        async function checkIfDone(id) {
+            const snap = await get(ref(db, `results/${id}/${today}`));
+            if(snap.exists()) {
+                document.getElementById('status-card').classList.add('hidden');
+                document.getElementById('done-card').classList.remove('hidden');
+            }
+        }
+
+        // --- Logic: Booster ---
+        window.startBooster = () => {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('booster-ui').classList.remove('hidden');
+            showQuestion();
+        };
+
+        function showQuestion() {
+            const qKey = `q${currentQIdx + 1}`;
+            const qData = currentBooster.questions[qKey];
+            
+            document.getElementById('q-num').innerText = `0${currentQIdx + 1}`;
+            document.getElementById('q-text').innerText = qData.text;
+            
+            if(qData.img) {
+                document.getElementById('q-img-box').classList.remove('hidden');
+                document.getElementById('q-img').src = qData.img;
+            } else {
+                document.getElementById('q-img-box').classList.add('hidden');
+            }
+
+            const optBox = document.getElementById('options');
+            optBox.innerHTML = '';
+            qData.ans.forEach((a, i) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 glass hover:bg-white/10 transition border border-white/5 rounded-2xl text-sm";
+                btn.innerText = a;
+                btn.onclick = () => handleAnswer(i + 1);
+                optBox.appendChild(btn);
             });
         }
 
-        // 2. Load Today's Booster
-        onValue(ref(db, 'booster/' + today), (snap) => {
-            activeQuestion = snap.val();
-            if(activeQuestion) {
-                document.getElementById('boosterTitle').innerText = "UNIT: " + (activeQuestion.q).substring(0, 15) + "...";
-            }
-        });
+        function handleAnswer(ans) {
+            const qKey = `q${currentQIdx + 1}`;
+            const isCorrect = ans == currentBooster.questions[qKey].correct;
+            answers.push(isCorrect);
 
-        // 3. Load Recovery Cards
-        onValue(ref(db, `users/${studentID}/recovery`), (snap) => {
-            const recoveryData = snap.val();
-            if(recoveryData) {
-                const container = document.getElementById('recoveryContainer');
-                container.innerHTML = `
-                    <div class="snap-item glass-card p-6 border-l-4 border-pink-500 flex flex-col justify-between h-44 bg-gradient-to-br from-white/5 to-transparent" onclick="alert('පිළිතුර: ${recoveryData.back}')">
-                        <p class="text-sm font-semibold text-gray-200">${recoveryData.front}</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-pink-400">#Recovery</span>
-                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i class="fas fa-eye text-xs"></i></div>
-                        </div>
-                    </div>
-                `;
-            }
-        });
-
-        // 4. Start Booster Logic
-        window.startBooster = function() {
-            if(!activeQuestion) return alert("අද දිනට තවමත් ප්‍රශ්න ඇතුළත් කර නැත.");
-            
-            const userAnswer = prompt(activeQuestion.q + "\n\nපිළිතුර ඇතුළත් කරන්න:");
-            if(userAnswer == activeQuestion.a) {
-                alert("විශිෂ්ටයි! පිළිතුර නිවැරදියි. 🎉");
+            if(currentQIdx < 2) {
+                currentQIdx++;
+                showQuestion();
             } else {
-                alert("පිළිතුර වැරදියි! මෙය ඔබගේ Recovery Cards වලට එකතු වුණා.");
-                // Add to Recovery
-                set(ref(db, `users/${studentID}/recovery`), {
-                    front: activeQuestion.q,
-                    back: activeQuestion.a
+                finishBooster();
+            }
+        }
+
+        async function finishBooster() {
+            const id = localStorage.getItem('studentId');
+            // Pattern Calculation for ANL 1
+            // 1=Correct, 0=Wrong. Ex: [true, false, false] -> pattern index 0
+            const patternIdx = calculatePatternIndex(answers);
+            const videoUrl = currentBooster.patterns[patternIdx];
+
+            // Space Repetition Logic for Flashcards
+            answers.forEach((isCorrect, idx) => {
+                if(!isCorrect) {
+                    const flash = currentBooster.flashCards[idx];
+                    addToRecovery(id, flash);
+                }
+            });
+
+            await set(ref(db, `results/${id}/${today}`), {
+                answers: answers,
+                timestamp: Date.now()
+            });
+
+            alert("අද booster එක අවසන්! ඔබට අදාළ වීඩියෝව දැන් පෙන්වනු ඇත.");
+            window.location.href = videoUrl;
+        }
+
+        function calculatePatternIndex(ans) {
+            // Mapping patterns like "(1) හරි, (2) වැරදි, (3) වැරදි" etc to 0-7 index
+            if(ans[0] && !ans[1] && !ans[2]) return 0;
+            if(!ans[0] && ans[1] && !ans[2]) return 1;
+            if(!ans[0] && !ans[1] && ans[2]) return 2;
+            if(ans[0] && ans[1] && !ans[2]) return 3;
+            if(ans[0] && !ans[1] && ans[2]) return 4;
+            if(!ans[0] && ans[1] && ans[2]) return 5;
+            if(ans[0] && ans[1] && ans[2]) return 6;
+            return 7;
+        }
+
+        function addToRecovery(id, flash) {
+            const nextDate = new Date();
+            nextDate.setDate(nextDate.getDate() + 1); // Step 1: 1 day later
+            const key = nextDate.toISOString().split('T')[0];
+            set(ref(db, `recovery/${id}/${key}/${Date.now()}`), flash);
+        }
+
+        async function loadRecovery(id) {
+            const snap = await get(ref(db, `recovery/${id}/${today}`));
+            if(snap.exists()) {
+                const container = document.getElementById('recovery-items');
+                container.innerHTML = '';
+                Object.values(snap.val()).forEach(card => {
+                    container.innerHTML += `
+                        <div class="p-4 bg-white/5 border border-pink-500/20 rounded-2xl flex justify-between items-center">
+                            <span class="text-xs">${card.front}</span>
+                            <button onclick="alert('${card.back}')" class="text-[10px] bg-pink-500/20 text-pink-500 px-3 py-1 rounded-lg font-bold">VIEW ANSWER</button>
+                        </div>
+                    `;
                 });
             }
         }
 
-        // Chart Implementation
-        const ctx = document.getElementById('mobilePremiumChart').getContext('2d');
-        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-        gradient.addColorStop(0, 'rgba(112, 0, 255, 0.4)');
-        gradient.addColorStop(1, 'rgba(112, 0, 255, 0)');
+        // Auto Login if ID exists
+        const savedId = localStorage.getItem('studentId');
+        if(savedId) loadDashboard(savedId);
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-                datasets: [{
-                    data: [45, 52, 48, 70, 65, 85, 92],
-                    borderColor: '#7000ff',
-                    borderWidth: 3,
-                    pointRadius: 0,
-                    tension: 0.45,
-                    fill: true,
-                    backgroundColor: gradient
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#444', font: { size: 9, weight: 'bold' } } },
-                    y: { display: false }
-                }
-            }
-        });
     </script>
 </body>
 </html>
